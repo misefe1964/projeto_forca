@@ -1,0 +1,75 @@
+#externo{
+    background-color: black;
+    border-radius: 25px;
+}
+#adversario,#nome{
+    background-color: #735b8a;
+    color: white;
+}
+#joga,#conecta{
+    background-color: #735b8a;
+    color: white;
+    transition: background 0.5s linear;
+}
+#joga:hover,#conecta:hover {
+    background: magenta;
+}
+#identificacao,#escolhe-jogador {
+    color: white;
+}
+#erro {
+    color: #ff6666;
+}
+body {
+    background-color: #330066;
+}
+h3,h2,h1 {
+    text-align: center;
+    color: white;
+}
+td {
+    width: 100px;
+    height: 100px;
+}
+table {
+    margin: 70px auto;
+}
+.vertical {
+    border-left: 2px solid #FFFF00;
+    border-right: 2px solid #FFFF00;
+}
+.horizontal {
+    border-top: 2px solid #FFFF00;
+    border-bottom: 2px solid #FFFF00;
+} 
+#tabuleiro {
+    display: table-cell;
+    background-color: #4a2c68;
+    width: 65%;
+    float: left;
+    height: 500px;
+    border-top: 50px;
+    border-radius-left: 25px;
+}
+#lista-conectados {
+    background-color: black;
+    width: 25%;
+    margin-left:70%;
+    height: 500px;
+    border-radius: 25px;
+    color: white;
+}
+#lista-canvas {
+    width: 100%;
+    height: 95%;
+    color: white;
+}
+#select-cell {
+    background-color: #57337a;
+    display: block;
+    width: 95%;
+    height: 95%;
+    margin: 2px auto;
+    float: center;
+    color: white;
+}
