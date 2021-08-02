@@ -17,7 +17,7 @@ app.get(/^(.+)$/, (req, res) => {
     }
 })
 
-app.listen(8080, () => {
+app.listen(4000, () => {
     console.log("Servidor no ar!")
 })
 
@@ -26,7 +26,6 @@ var vetorClientes = []
 const wss = new WebSocket.Server({port : 10000}, () => {
     console.log('rodando')
 })
-var contador = 0
 
 function broadcast (msg) {
     for (let i=0; i<vetorClientes.length; i++) {
@@ -37,11 +36,9 @@ function broadcast (msg) {
 }
 
 function notifyAd (msg) {
-    console.log("AND you get to the func!")
     for (let i = 0; i < vetorClientes.length; i++) {
         console.log("ha" + vetorClientes[i].ID + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
-            console.log(vetorClientes[i].ID + " é igual a " + msg.adv1)
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
             } catch (e) {
