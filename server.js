@@ -37,10 +37,12 @@ function broadcast (msg) {
 
 function notifyAd (msg) {
     for (let i = 0; i < vetorClientes.length; i++) {
-        console.log("ha" + vetorClientes[i].ID + " " + msg.adv1)
+        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
+
+                console.log("Jogo enviado!")
             } catch (e) {
                 console.log(e)
             }
@@ -82,7 +84,6 @@ wss.on('connection', function connection(ws) {
                     }
                     else {
                         ws.close()
-                        console.log("this is it.......")
                     }
                 break;
                 default:
@@ -90,14 +91,12 @@ wss.on('connection', function connection(ws) {
             }
         }catch (e){
             ws.close()
-            console.log("this is it!")
         }
     })
 
     ws.on('close', function incoming(message) {
         for(let i = 0; i < vetorClientes.length; i++) {
             if (vetorClientes[i] == ws){
-                console.log("ACHOU")
                 vetorClientes.splice(i, 1)
                 break;
             }
