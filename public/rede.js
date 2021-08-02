@@ -35,7 +35,7 @@ function conectaServidorSockets(url, nome){
                 console.log('usuarioNovo')
             break;
             case 'jogo':
-                PubSub.publish('jogo', tmp)
+                PubSub.publish('recebeJogo', tmp)
                console.log("recebeu jogo!")
         }
     }
