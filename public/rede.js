@@ -68,30 +68,15 @@ function criaJogo() {
     var thtml = O('lista-conectados').innerHTML
     var existe = thtml.indexOf(ad)
     if (existe != -1) {
-        var jogo
-
-        if(Math.floor(Math.random()*100) % 2 == 0){
-            jogo = {x:ad, o: O('nome').value}
-            var simb = 'x'
-            var simb2 = 'o'
-        } else {
-            jogo = {x:O('nome').value, o: ad}
-            var simb = 'o'
-            var simb2 = 'x'
-        }
-        console.log(jogo)
 
         O('header-jogo').innerText = 'Jogo com '+ad
         O('escolhe-jogador').style.display = 'none'
         O('header-jogo').style.display='table'
-        O('mostra-simbolo').innerText = 'Você é '+simb2
-        O('mostra-simbolo').style.display='table'
         O('tabul').style.display = 'table'
         O('erro').style.display = 'none'
 
-        console.log('Iniciando jogo ' + JSON.stringify(jogo))
 
-        var j = {tipo:'jogo', adv1:ad, adv2: O('nome').value, simbolo:simb} 
+        var j = {tipo:'jogo', adv1:ad, adv2: O('nome').value} 
 
         console.log(JSON.stringify(j))
         socket.send(JSON.stringify(j))
