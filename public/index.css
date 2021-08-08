@@ -27,6 +27,10 @@ h3,h2,h1 {
     text-align: center;
     color: white;
 }
+#header-jogo{
+    text-align:center;
+    color:black;
+}
 td {
     width: 100px;
     height: 100px;
@@ -44,7 +48,7 @@ table {
 } 
 #tabuleiro {
     display: table-cell;
-    background-color: #4a2c68;
+    background-color: #ebafe1;
     width: 65%;
     float: left;
     height: 500px;
