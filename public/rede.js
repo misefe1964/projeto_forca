@@ -9,6 +9,17 @@ function O(X){
 //     console.log(y)
 // }
 
+PubSub.subscribe('jogo', function(msg, data) {
+    console.log(data)
+    socket.send(JSON.stringify(data));
+})
+
+PubSub.subscribe('aceitaJogo', function(msg, data) {
+    data.tipo = 'jogoAceito';
+    socket.send(JSON.stringify(data))
+})
+
+
 function conectaServidorSockets(url, nome){
     socket = new ReconnectingWebSocket(url)
 
@@ -34,9 +45,12 @@ function conectaServidorSockets(url, nome){
                 PubSub.publish('usuarioNovo', tmp)
                 console.log('usuarioNovo')
             break;
-            case 'jogo':
-                PubSub.publish('recebeJogo', tmp)
-               console.log("recebeu jogo!")
+            case 'solJogo':
+                PubSub.publish('solicita', tmp)
+                console.log("solicitando... jogo!")
+            case 'desafioAceito':
+                PubSub.publish('iniciaJogo', tmp)
+                console.log("Iniciando jogo aceito");
         }
     }
 }
@@ -63,34 +77,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     })
 })
 
-function criaJogo() {
-    var ad = O('adversario').value
-    var thtml = O('lista-conectados').innerHTML
-    var existe = thtml.indexOf(ad)
-    if (existe != -1) {
 
-        O('header-jogo').innerText = 'Jogo com '+ad
-        O('escolhe-jogador').style.display = 'none'
-        O('header-jogo').style.display='table'
-        O('tabul').style.display = 'table'
-        O('erro').style.display = 'none'
-
-
-        var j = {tipo:'jogo', adv1:ad, adv2: O('nome').value} 
-
-        console.log(JSON.stringify(j))
-        socket.send(JSON.stringify(j))
-    } else {
-        O('erro').style.display = 'inline'
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function(event) {
-    O('joga').addEventListener('click', criaJogo)
-    O('adversario').addEventListener('keydown', event => {
-        if (event.key == "Enter"){
-            criaJogo() 
-        } 
-    }) 
-    // O('select-cell').addEventListener('click', jogada(O('select-cell').x, O('select-cell').y))
-})

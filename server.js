@@ -7,6 +7,8 @@ var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost:27017'
 var dbo
 
+var palavras = []
+
 MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, function(err, db) {
     if (err) {
         console.log("Erro conectando com o servidor de BD")
@@ -23,7 +25,9 @@ MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, func
         if (result[0] == undefined) console.log("Não deu certo")
         else{
             for (let a = 0; a < result.length; a++) {
-                console.log("Achou ", result[a].p)
+                console.log("Achou palavra", result[a].p, " no banco de dados.")
+                // guarda palavras do BD na lista 'palavras'
+                palavras.push(result[a].p)
             }
         }
     })
@@ -61,7 +65,10 @@ function broadcast (msg) {
     }
 }
 
+// envia solicitação de jogo
 function notifyAd (msg) {
+    msg.tipo = 'solJogo';
+    console.log("Servidor enviando para rede em 2: " + msg.tipo);
     for (let i = 0; i < vetorClientes.length; i++) {
         console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
@@ -75,6 +82,49 @@ function notifyAd (msg) {
         }
     }
     console.log("Jogo enviado!")
+}
+
+// envia para desafiante, após aceitação do desafio
+function beginAd (msg) {
+    msg.tipo = 'desafioAceito';
+    msg.palavra = palavras[Math.floor(Math.random() * palavras.length)]
+    // neste momento, msg é: 
+    // adv1: adversário
+    // adv2: desafiante
+    // Envia nesse formato para o adversário:
+    console.log("Servidor enviando para rede em 3: " + msg.tipo);
+    for (let i = 0; i < vetorClientes.length; i++) {
+        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
+        if(vetorClientes[i].ID == msg.adv1) {
+            try {
+                vetorClientes[i].send(JSON.stringify(msg))
+
+                console.log("Jogo enviado!")
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+    let tmp1 = msg.adv1;
+    msg.adv1 = msg.adv2;
+    msg.adv2 = tmp1;
+    // neste momento, msg é: 
+    // adv1: desafiante
+    // adv2: adversario
+    // Envia nesse formato para o adversário:
+
+    for (let i = 0; i < vetorClientes.length; i++) {
+        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
+        if(vetorClientes[i].ID == msg.adv1) {
+            try {
+                vetorClientes[i].send(JSON.stringify(msg))
+
+                console.log("Jogo enviado!")
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
 }
 
 wss.on('connection', function connection(ws) {
@@ -109,6 +159,18 @@ wss.on('connection', function connection(ws) {
                         notifyAd(x)
                     }
                     else {
+                        ws.close()
+                    }
+                break;
+                case 'jogoAceito':
+                    if(ws.validado == true){
+                        // Se jogo foi aceito:
+                        // Manda palavra também
+                        let palavra = palavras[Math.floor(Math.random()*palavras.length)]
+                        let pal = {'tipo': 'palavra', 'p':palavra}
+                        console.log(x)
+                        beginAd(x, pal);
+                                            } else {
                         ws.close()
                     }
                 break;
