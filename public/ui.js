@@ -36,7 +36,6 @@ PubSub.subscribe('recebeJogo', function(msg, data) {
     console.log(JSON.stringify(data))
     O('header-jogo').innerText = 'Jogo com '+data.adv2
     O('header-jogo').style.display='table'
-    O('mostra-simbolo').style.display='table'
     O('tabul').style.display = 'table'
     O('escolhe-jogador').style.display = 'none'
     O('erro').style.display = 'none'
