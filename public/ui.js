@@ -28,6 +28,41 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
     O('tabul').style.display = 'table'
     O('escolhe-jogador').style.display = 'none'
     O('erro').style.display = 'none'
+
+    
+    let palavra = data.palavra 
+    let chances = 6
+    let acertos = 0
+    let pos;
+
+    console.log("Iniciando: ")
+    // Coloca Linhas para as letras da palavra:
+    for (pos = 0; pos < palavra.length; pos++) {
+        let span = document.createElement('span')
+        span.setAttribute('id', pos);
+        span.setAttribute('class', "sp")
+
+        let div = O('palavra')
+        div.appendChild(span)
+    }
+
+    // Coloca botões para letras do alfabeto
+    console.log("Alfabeto... ")
+    let alfabeto = "abcdefghijklmnopqrstuvwxyz"
+    let letras = alfabeto.split("")
+
+    for(pos = 0; pos < letras.length; pos++){
+        let b = document.createElement("button")
+        let l = document.createTextNode(letras[pos])
+
+        b.appendChild(l)
+        b.setAttribute('id', letras[pos])
+        b.setAttribute('onclick', 'selLetra(\''+letras[pos]+'\')')
+
+        let div = document.getElementById("letras")
+        div.appendChild(b)
+    }
+    
 })
 
 

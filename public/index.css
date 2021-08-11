@@ -38,6 +38,28 @@ td {
 table {
     margin: 70px auto;
 }
+.flex-container-1 {
+    display: flex;
+    justify-content: center;
+}
+.flex-container-2-2 {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+.sp{
+    display: flex;
+    justify-content: center;
+    border-bottom: 3px solid black;
+    width: 40px;
+    margin: 5px;
+    padding-bottom: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 .vertical {
     border-left: 2px solid #FFFF00;
     border-right: 2px solid #FFFF00;
