@@ -15,7 +15,9 @@ function selLetra(l, data){
         jogada.acertos = 0
         jogada.chances = 6
     }
+    jogada.letra = l
     PubSub.publish('jogada', jogada)
+
 
 }
 
@@ -90,6 +92,14 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
 
             let div = document.getElementById("letras")
             div.appendChild(b)
+        }
+        O('vez').style.display = 'inline'
+        if(data.adj == O('nome').value){
+            O('vez').setAttribute('color', 'green')
+            O('vez').innerHTML = "Sua vez!"
+        } else {
+            O('vez').setAttribute('color', 'red')
+            O('vez').innerHTML = "Aguarde a sua vez..."
         }
     }
 

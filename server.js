@@ -26,7 +26,7 @@ MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, func
         if (result[0] == undefined) console.log("Não deu certo")
         else{
             for (let a = 0; a < result.length; a++) {
-                console.log("Achou palavra", result[a].p, " no banco de dados.")
+                console.log("Achou palavra", result[a].p, "no banco de dados.")
                 // guarda palavras do BD na lista 'palavras'
                 palavras.push(result[a].p)
             }

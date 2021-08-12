@@ -6,6 +6,10 @@
     background-color: #735b8a;
     color: white;
 }
+#vez {
+    align-items: center;
+    color:brown;
+}
 #joga,#conecta{
     background-color: #735b8a;
     color: white;
