@@ -38,11 +38,7 @@ td {
 table {
     margin: 70px auto;
 }
-.flex-container-1 {
-    display: flex;
-    justify-content: center;
-}
-.flex-container-2-2 {
+#palavra {
     display: flex;
     justify-content: center;
     flex-direction: row;
@@ -60,6 +56,13 @@ table {
     font-weight: bold;
     text-transform: uppercase;
 }
+#letras{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 40px;
+}
 .vertical {
     border-left: 2px solid #FFFF00;
     border-right: 2px solid #FFFF00;
@@ -68,8 +71,13 @@ table {
     border-top: 2px solid #FFFF00;
     border-bottom: 2px solid #FFFF00;
 } 
+#tabul{
+    display: flex;
+    justify-content: center;
+}
 #tabuleiro {
-    display: table-cell;
+    display: "table-cell";
+    justify-content:center;
     background-color: #ebafe1;
     width: 65%;
     float: left;

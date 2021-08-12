@@ -177,7 +177,7 @@ wss.on('connection', function connection(ws) {
                         let pal = {'tipo': 'palavra', 'p':palavra}
                         console.log(x)
                         beginAd(x, pal);
-                                            } else {
+                    } else {
                         ws.close()
                     }
                 break;

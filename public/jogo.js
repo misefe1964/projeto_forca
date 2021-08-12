@@ -50,6 +50,7 @@ PubSub.subscribe('solicita', function(msg, data) {
 
     console.log("Recebeu soliticação de jogo de " + data.adv2)
     // implementar lógica de aceitar jogo
+    // AQUIIIII
     // se aceita:
     PubSub.publish('aceitaJogo', data)
 })
