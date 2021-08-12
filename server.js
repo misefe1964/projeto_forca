@@ -8,6 +8,7 @@ var url = 'mongodb://localhost:27017'
 var dbo
 
 var palavras = []
+var palavraSelecionada
 
 MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, function(err, db) {
     if (err) {
@@ -86,8 +87,11 @@ function notifyAd (msg) {
 
 // envia para desafiante, após aceitação do desafio
 function beginAd (msg) {
+    let chance = Math.floor(Math.random()*10)
+    msg.chance = chance
     msg.tipo = 'desafioAceito';
-    msg.palavra = palavras[Math.floor(Math.random() * palavras.length)]
+    palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)]
+    msg.tamPalavra = palavraSelecionada.length;
     // neste momento, msg é: 
     // adv1: adversário
     // adv2: desafiante

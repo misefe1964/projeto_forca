@@ -30,14 +30,11 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
     O('erro').style.display = 'none'
 
     
-    let palavra = data.palavra 
-    let chances = 6
-    let acertos = 0
     let pos;
 
     console.log("Iniciando: ")
     // Coloca Linhas para as letras da palavra:
-    for (pos = 0; pos < palavra.length; pos++) {
+    for (pos = 0; pos < data.tamPalavra; pos++) {
         let span = document.createElement('span')
         span.setAttribute('id', pos);
         span.setAttribute('class', "sp")
@@ -56,13 +53,21 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
         let l = document.createTextNode(letras[pos])
 
         b.appendChild(l)
-        b.setAttribute('id', letras[pos])
-        b.setAttribute('onclick', 'selLetra(\''+letras[pos]+'\')')
+        b.setAttribute('id', "botaoLetra")
 
         let div = document.getElementById("letras")
         div.appendChild(b)
     }
-    
+
+    // quem começa?
+    // jogada = {tipo: 'jogada', status: 'i' para indefinido ou 'a' para acerto ou 'e' para erro,
+    // letra: [letra do botão clicado], chances: [chances restantes], acertos: [letras acertadas], 
+    // adj: [jogador que jogou], adp: [jogador que vai jogar]}
+    let jogada = {tipo: 'jogada', chances: 6, acertos: 0, prim:1}  
+    if(data.chance == 1){
+        jogada.adp = O('nome').value
+        jodada.adv = data.adv2
+    }
 })
 
 
