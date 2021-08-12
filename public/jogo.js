@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 //     // O('select-cell').addEventListener('click', jogada(O('select-cell').x, O('select-cell').y))
 // })
 
-// Alguém colicitou para jogar:
+// recebe jogada:
+
+// Alguém solicitou para jogar:
 PubSub.subscribe('solicita', function(msg, data) {
 
     console.log("Recebeu soliticação de jogo de " + data.adv2)

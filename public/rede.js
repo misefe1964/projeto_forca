@@ -19,6 +19,12 @@ PubSub.subscribe('aceitaJogo', function(msg, data) {
     socket.send(JSON.stringify(data))
 })
 
+// jogada recebida
+PubSub.subscribe('jogada', function(msg, data){
+    console.log("Jogada recebida:")
+    console.log(data)
+    socket.send(JSON.stringify(data))
+})
 
 function conectaServidorSockets(url, nome){
     socket = new ReconnectingWebSocket(url)

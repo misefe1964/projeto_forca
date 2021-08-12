@@ -87,8 +87,11 @@ function notifyAd (msg) {
 
 // envia para desafiante, após aceitação do desafio
 function beginAd (msg) {
-    let chance = Math.floor(Math.random()*10)
-    msg.chance = chance
+    let chance = Math.floor(Math.random()*10)%2
+    if (chance == 0)
+        msg.adj = msg.adv2
+    else
+        msg.adj = msg.adv1
     msg.tipo = 'desafioAceito';
     palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)]
     msg.tamPalavra = palavraSelecionada.length;
@@ -177,6 +180,9 @@ wss.on('connection', function connection(ws) {
                                             } else {
                         ws.close()
                     }
+                break;
+                case 'jogada':
+                    analisaJogada(x)
                 break;
                 default:
                     ws.close();
