@@ -7,7 +7,7 @@
     color: white;
 }
 #vez {
-    align-items: center;
+    text-align: center;
     color:brown;
 }
 #joga,#conecta{
@@ -110,4 +110,17 @@ table {
     margin: 2px auto;
     float: center;
     color: white;
+}
+.certa, .certa:hover{
+    background: #66ffb2;
+    border: 1px solid #66ffb2;
+    cursor:inherit;
+}
+.errada, .errada:hover {
+    background: #f01b69;
+    border: 1px solid #f01b69;
+    cursor: inherit;
+}
+#sol{
+    align-items: center;
 }
