@@ -47,7 +47,7 @@ app.get('/add', function(req, resp){
     if(novaPalavra){
         if(palavras.indexOf(novaPalavra) == -1){
             dbo.collection("palavras").insertOne({p: novaPalavra})
-            resp.write("Palavra", novaPalavra, "foi adicionada ao Banco de Dados")
+            resp.write("Palavra "+novaPalavra+" foi adicionada ao Banco de Dados")
             palavras.push(novaPalavra)
         } else {
             resp.write("Palavra já existente no Banco de Dados...")
