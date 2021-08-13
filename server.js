@@ -8,6 +8,7 @@ var url = 'mongodb://localhost:27017'
 var dbo
 
 var palavras = []
+var jogos = []
 var palavraSelecionada
 
 MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, function(err, db) {
@@ -23,7 +24,7 @@ MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, func
 
     dbo.collection('palavras').find({}).toArray(function (err, result) {
         if (err) throw err;
-        if (result[0] == undefined) console.log("Não deu certo")
+        if (result[0] == undefined) console.log("BD não deu certo")
         else{
             for (let a = 0; a < result.length; a++) {
                 console.log("Achou palavra", result[a].p, "no banco de dados.")
@@ -76,24 +77,25 @@ function notifyAd (msg) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
 
-                console.log("Jogo enviado!")
+                console.log("Jogo enviado para início!!")
             } catch (e) {
                 console.log(e)
             }
         }
     }
-    console.log("Jogo enviado!")
 }
 
 // envia para desafiante, após aceitação do desafio
 function beginAd (msg) {
+    msg.tentadas = []
     let chance = Math.floor(Math.random()*10)%2
     if (chance == 0)
         msg.adj = msg.adv2
     else
         msg.adj = msg.adv1
     msg.tipo = 'desafioAceito';
-    palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)]
+    let palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)].toLowerCase()
+    jogos.push([palavraSelecionada, msg.adv1, msg.adv2])
     msg.tamPalavra = palavraSelecionada.length;
     // neste momento, msg é: 
     // adv1: adversário
@@ -101,12 +103,11 @@ function beginAd (msg) {
     // Envia nesse formato para o adversário:
     console.log("Servidor enviando para rede em 3: " + msg.tipo);
     for (let i = 0; i < vetorClientes.length; i++) {
-        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
 
-                console.log("Jogo enviado!")
+                console.log("Jogo enviado para ", msg.adv1)
             } catch (e) {
                 console.log(e)
             }
@@ -121,18 +122,76 @@ function beginAd (msg) {
     // Envia nesse formato para o adversário:
 
     for (let i = 0; i < vetorClientes.length; i++) {
-        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
 
-                console.log("Jogo enviado!")
+                console.log("Jogo enviado para", msg.adv1)
             } catch (e) {
                 console.log(e)
             }
         }
     }
 }
+function analisaJogada(x){
+    x.tipo = "jogadaF"
+    console.log(jogos)
+    // localiza palavra do jogo
+    let i
+    let advj = x.adj
+    let palavra
+    let pos = []
+    for(i = 0; i < jogos.length; i++){
+        if (jogos[i].indexOf(advj) != -1){
+            palavra = jogos[i][0]
+            break
+        }
+    }
+    // troca a vez
+    if(x.adj == x.adv1)
+        x.adj = x.adv2
+    else
+        x.adj = x.adv1
+
+    let acertou = false
+
+    for(i = 0; i < palavra.length; i++){
+        if(x.letra === palavra[i]) {
+            pos.push(i)
+            x.acertos += 1
+            acertou = true
+        }
+    }
+    x.preencher = pos
+    x.tentadas.push(x.letra)
+
+    if (acertou == false) {
+        x.chances -= 1
+    }
+    for (let i = 0; i < vetorClientes.length; i++) {
+        if(vetorClientes[i].ID == x.adv1) {
+            try {
+                vetorClientes[i].send(JSON.stringify(x))
+
+                console.log("Enviando jogada processada para "+x.adv1)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+    for (let i = 0; i < vetorClientes.length; i++) {
+        if(vetorClientes[i].ID == x.adv2) {
+            try {
+                vetorClientes[i].send(JSON.stringify(x))
+
+                console.log("Enviando jogada processada para "+x.adv2)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+}
+
 
 wss.on('connection', function connection(ws) {
     ws.validado = false
@@ -201,5 +260,14 @@ wss.on('connection', function connection(ws) {
         }
         console.log('Cliente desconectou')
         console.log('QTD clientes: '+vetorClientes.length)
+        jogoCleanUp()
     })
 })
+
+// apaga jogo de usuários deslogados...
+function jogoCleanUp(){
+    for(let i = 0; i < jogos.length; i++){
+        if(vetorClientes.indexOf(jogos[i][1]) == -1 || vetorClientes.indexOf(jogos[i][2]) == -1)
+            jogos.splice(i, 1)
+    }
+}
