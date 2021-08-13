@@ -21,6 +21,13 @@ function gogo(){
     PubSub.publish('aceitaJogo', jogo)
 }
 
+function beginning(){
+    O('header-jogo').style.display = 'none'
+    O('tabul').style.display = 'none'
+    O('erro').style.display = 'none'
+    O('vez').style.display = 'none'
+    O('escolhe-jogador').style.display = 'inline'
+}
 
 function selLetra(l){
     // se é a primeira jogada:
@@ -141,20 +148,27 @@ PubSub.subscribe('jogadaF', function(msg, data){
         mens.appendChild(t1)
 
         let b = document.createElement("button")
-        let t2 = document.createTextNode("Início")
+        let t2 = document.createTextNode("Sair")
+        let b2 = document.createElement("button")
+        let t3 = document.createTextNode("Início")
         b.appendChild(t2)
+        b2.appendChild(t3)
         b.setAttribute('class', 'newBt')
+        b2.setAttribute('class', 'newBt')
         b.setAttribute('onclick', 'window.location.reload()')
+        b2.setAttribute('onClick', 'beginning()')
 
         let d = O('novo')
         d.appendChild(mens)
         d.appendChild(b)
+        d.appendChild(b2)
         
         O('letras').style.display = 'none'
         O('vez').style.display = 'none'
-
- 
+        let f = {tipo:'fim',j:O('nome').value,s:'d'}
+        PubSub.publish('fimJogo', f)
     }
+    // se acertou todas as letras:
     else if(data.acertos == data.tamPalavra){
         console.log("FIMMMM no bom sentido")
         let mens = document.createElement("p")
@@ -174,6 +188,9 @@ PubSub.subscribe('jogadaF', function(msg, data){
 
         O('letras').style.display = 'none'
         O('vez').style.display = 'none'
+
+        let f = {tipo:'fim',j:O('nome').value,s:'v'}
+        PubSub.publish('fimJogo', f)
 
     }
     else{

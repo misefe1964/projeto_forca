@@ -68,6 +68,10 @@ function conectaServidorSockets(url, nome){
     }
 }
 
+PubSub.subscribe('fimJogo', function(msg, data){
+    socket.send(JSON.stringify(data))
+})
+
 function fazConexao(){
     O('identificacao').style.display='none'
     var nome = O('nome').value
