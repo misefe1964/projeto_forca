@@ -9,7 +9,6 @@ var dbo
 
 var palavras = []
 var jogos = []
-var palavraSelecionada
 
 MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, function(err, db) {
     if (err) {
@@ -24,7 +23,7 @@ MongoClient.connect(url, {useUnifiedTopology: true, useNewUrlParser: true}, func
 
     dbo.collection('palavras').find({}).toArray(function (err, result) {
         if (err) throw err;
-        if (result[0] == undefined) console.log("BD não deu certo")
+        if (result[0] == undefined) console.log("BD não encontrou palavras")
         else{
             for (let a = 0; a < result.length; a++) {
                 console.log("Achou palavra", result[a].p, "no banco de dados.")
@@ -40,14 +39,34 @@ app.use(bodyParser.json())
 
 app.use(express.static(__dirname + '/public'))
 
+// Para adicionar palavra: localhost:4000/add?p=<palavra>
+app.get('/add', function(req, resp){
+    console.log("Acionou BD")
+    let novaPalavra = req.query.p
+
+    if(novaPalavra){
+        if(palavras.indexOf(novaPalavra) == -1){
+            dbo.collection("palavras").insertOne({p: novaPalavra})
+            resp.write("Palavra", novaPalavra, "foi adicionada ao Banco de Dados")
+            palavras.push(novaPalavra)
+        } else {
+            resp.write("Palavra já existente no Banco de Dados...")
+        }
+    }
+    else {
+        resp.write("Insira uma palavra, na forma '/add?p=<palavra>'")
+    }
+    return resp.end()
+})
 app.get(/^(.+)$/, (req, res) => {
     try {
-        res.white("A página que vc busca não existe")
+        res.write("A pagina que vc busca nao existe")
         res.end()
     } catch(e){
         res.end()
     }
 })
+
 
 app.listen(4000, () => {
     console.log("Servidor no ar!")
@@ -64,6 +83,34 @@ function broadcast (msg) {
         try {
             vetorClientes[i].send(msg)
         } catch (e) {}
+    }
+}
+
+function processaFim(x){
+    // let query = {_id:x.j}
+    // let found = dbo.collection('usuarios').findOne(query) 
+    // if(JSON.stringify(found) == '{}'){
+    //     if(x.s == 'v'){
+    //         dbo.collection('usuarios').insertOne({_id:x.j, v:1, d:0})
+    //     }
+    //     else if(x.s == 'd'){
+    //         dbo.collection('usuarios').insertOne({_id:x.j, v:0, d:1})
+    //     }
+    // }
+    // else{
+    //     if(x.s == 'v'){
+    //         db.usuarios.updateOne(query, {$inc: {v:1}})
+    //     }
+    //     else if (x.s == 'd'){
+    //         db.usuarios.updateOne(query, {$inc: {d:1}})
+    //     }
+    // }
+    // console.log("Encontrou:", JSON.stringify(found), "enquanto procurava", x.j)
+    for(let i = 0; i < jogos.length; i++) {
+        if (jogos[i][1] == x.j || jogos[i][2] == x.j){
+            jogos.splice(i, 1)
+            break;
+        }
     }
 }
 
@@ -106,13 +153,13 @@ function beginAd (msg) {
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
-
                 console.log("Jogo enviado para ", msg.adv1)
             } catch (e) {
                 console.log(e)
             }
         }
     }
+
     let tmp1 = msg.adv1;
     msg.adv1 = msg.adv2;
     msg.adv2 = tmp1;
@@ -125,7 +172,6 @@ function beginAd (msg) {
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
-
                 console.log("Jogo enviado para", msg.adv1)
             } catch (e) {
                 console.log(e)
@@ -242,6 +288,9 @@ wss.on('connection', function connection(ws) {
                 break;
                 case 'jogada':
                     analisaJogada(x)
+                break;
+                case 'fim':
+                    processaFim(x)
                 break;
                 default:
                     ws.close();
