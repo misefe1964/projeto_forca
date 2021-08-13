@@ -20,8 +20,9 @@ PubSub.subscribe('aceitaJogo', function(msg, data) {
 })
 
 // jogada recebida
-PubSub.subscribe('jogada', function(msg, data){
-    console.log("Jogada recebida:")
+PubSub.subscribe('jogadaI', function(msg, data){
+    data.tipo = "jogada"    // garante que tipo de mensagem paa servidor é certa
+    console.log("Jogada não processada recebida:")
     console.log(data)
     socket.send(JSON.stringify(data))
 })
@@ -54,9 +55,15 @@ function conectaServidorSockets(url, nome){
             case 'solJogo':
                 PubSub.publish('solicita', tmp)
                 console.log("solicitando... jogo!")
+            break;
             case 'desafioAceito':
                 PubSub.publish('iniciaJogo', tmp)
                 console.log("Iniciando jogo aceito");
+            break;
+            case 'jogadaF':
+                // console.log('Rede recebe jogada processada: '+JSON.stringify(tmp))
+                PubSub.publish('jogadaF', tmp)
+            break;
         }
     }
 }
