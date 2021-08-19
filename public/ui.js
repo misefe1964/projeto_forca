@@ -21,6 +21,33 @@ PubSub.subscribe('todosUsuarios', function(msg, data) {
     }
 })
 
+function fazConexao(){
+    O('identificacao').style.display='none'
+    var nome = O('nome').value
+
+    PubSub.publish('connection', {nome:nome})
+
+    O('header-jogo').style.display='table'
+    O('greet').innerText = "Bem vindo(a) "+nome+"!"
+    O('greet').style.display = 'inline'
+}
+
+function criaJogo() {
+    var ad = O('adversario').value
+    var thtml = O('lista-conectados').innerHTML
+    var existe = thtml.indexOf(ad)
+    if (existe != -1) {
+        O('erro').style.display = 'none'
+        var j = {tipo:'jogo', adv1:ad, adv2: O('nome').value} 
+        console.log(JSON.stringify(j))
+        PubSub.publish('jogo', j)
+    } else {
+        O('erro').style.display = 'inline'
+    }
+}
+
+
+
 PubSub.subscribe('usuarioNovo', function(msg, data) {
     console.log(data.valor)
     O('lista-conectados').innerHTML = O('lista-conectados').innerHTML+'<br>'+data.valor
@@ -82,6 +109,21 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
         PubSub.publish('jogoAtual', data)
    }
 
+})
+
+PubSub.subscribe("init", function(msg, data){
+    O('conecta').addEventListener('click', fazConexao)
+    O('nome').addEventListener('keydown', event=> {
+        if(event.key == "Enter"){
+            fazConexao()
+        }
+    })
+    O('joga').addEventListener('click', criaJogo)
+    O('adversario').addEventListener('keydown', event => {
+        if (event.key == "Enter"){
+            criaJogo() 
+        } 
+    }) 
 })
 
 

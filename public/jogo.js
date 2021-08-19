@@ -2,20 +2,6 @@
 
 let jogo;
 
-function criaJogo() {
-    var ad = O('adversario').value
-    var thtml = O('lista-conectados').innerHTML
-    var existe = thtml.indexOf(ad)
-    if (existe != -1) {
-        O('erro').style.display = 'none'
-        var j = {tipo:'jogo', adv1:ad, adv2: O('nome').value} 
-        console.log(JSON.stringify(j))
-        PubSub.publish('jogo', j)
-    } else {
-        O('erro').style.display = 'inline'
-    }
-}
-
 function gogo(){
     // se aceita:
     PubSub.publish('aceitaJogo', jogo)
@@ -74,14 +60,8 @@ function preparaJogada(data){
     }
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    O('joga').addEventListener('click', criaJogo)
-    O('adversario').addEventListener('keydown', event => {
-        if (event.key == "Enter"){
-            criaJogo() 
-        } 
-    }) 
-    // O('select-cell').addEventListener('click', jogada(O('select-cell').x, O('select-cell').y))
+PubSub.subscribe('init', function(msg, data){
+   // O('select-cell').addEventListener('click', jogada(O('select-cell').x, O('select-cell').y))
 })
 // Alguém solicitou para jogar:
 PubSub.subscribe('solicita', function(msg, data) {

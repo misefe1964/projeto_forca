@@ -72,26 +72,8 @@ PubSub.subscribe('fimJogo', function(msg, data){
     socket.send(JSON.stringify(data))
 })
 
-function fazConexao(){
-    O('identificacao').style.display='none'
-    var nome = O('nome').value
-    conectaServidorSockets('ws://localhost:10000', nome)
-
-    var salva = {ID:nome, PASS:''}
-    localStorage.setItem('meusSettings', JSON.stringify(salva))
-
-    O('header-jogo').style.display='table'
-    O('greet').innerText = "Bem vindo(a) "+nome+"!"
-    O('greet').style.display = 'inline'
-}
-
-document.addEventListener("DOMContentLoaded", function(event) {
-    O('conecta').addEventListener('click', fazConexao)
-    O('nome').addEventListener('keydown', event=> {
-        if(event.key == "Enter"){
-            fazConexao()
-        }
-    })
+PubSub.subscribe('connection', function(msg, data){
+    conectaServidorSockets('ws://localhost:10000', data.nome)
 })
 
 
