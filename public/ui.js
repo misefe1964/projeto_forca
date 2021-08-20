@@ -7,11 +7,6 @@ function C(X){
     return document.getElementsByClassName(X)
 }
 
-O('header-jogo').style.display = 'none'
-O('tabul').style.display = 'none'
-O('greet').style.display = 'none'
-O('erro').style.display = 'none'
-O('vez').style.display = 'none'
 
 PubSub.subscribe('todosUsuarios', function(msg, data) {
     console.log(data.valor)
@@ -19,6 +14,14 @@ PubSub.subscribe('todosUsuarios', function(msg, data) {
     for(let a = 0; a < data.valor.length; a++) {
         O('lista-conectados').innerHTML = O('lista-conectados').innerHTML+'<br>'+data.valor[a]
     }
+})
+
+PubSub.subscribe('inicio', function(msg, data) {
+    O('header-jogo').style.display = 'none'
+    O('tabul').style.display = 'none'
+    O('erro').style.display = 'none'
+    O('vez').style.display = 'none'
+    O('escolhe-jogador').style.display = 'inline'
 })
 
 function fazConexao(){
@@ -112,6 +115,12 @@ PubSub.subscribe('iniciaJogo', function(msg, data) {
 })
 
 PubSub.subscribe("init", function(msg, data){
+    O('header-jogo').style.display = 'none'
+    O('tabul').style.display = 'none'
+    O('greet').style.display = 'none'
+    O('erro').style.display = 'none'
+    O('vez').style.display = 'none'
+
     O('conecta').addEventListener('click', fazConexao)
     O('nome').addEventListener('keydown', event=> {
         if(event.key == "Enter"){

@@ -8,11 +8,7 @@ function gogo(){
 }
 
 function beginning(){
-    O('header-jogo').style.display = 'none'
-    O('tabul').style.display = 'none'
-    O('erro').style.display = 'none'
-    O('vez').style.display = 'none'
-    O('escolhe-jogador').style.display = 'inline'
+   PubSub.publish("inicio", {}) 
 }
 
 function selLetra(l){
@@ -157,14 +153,20 @@ PubSub.subscribe('jogadaF', function(msg, data){
         O('letras')
 
         let b = document.createElement("button")
+        let b2 = document.createElement("button")
         let t2 = document.createTextNode("Início")
+        let t3 = document.createTextNode("Sair")
         b.appendChild(t2)
+        b2.appendChild(t3)
         b.setAttribute('class', 'newBt')
+        b2.setAttribute('class', 'newBt')
         b.setAttribute('onclick', 'window.location.reload()')
+        b2.setAttribute('onClick', 'beginning()')
         
         let d = O('novo')
         d.appendChild(mens)
         d.appendChild(b)
+        d.appendChild(b2)
 
         O('letras').style.display = 'none'
         O('vez').style.display = 'none'
