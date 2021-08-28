@@ -242,7 +242,7 @@ PubSub.subscribe('jogadaF', function(msg, data){
         b.setAttribute('class', 'newBt')
         b2.setAttribute('class', 'newBt')
         b.setAttribute('onclick', 'window.location.reload()')
-        b2.setAttribute('onClick', 'beginning()')
+        b2.setAttribute('onClick', 'beggining()')
 
         let d = O('novo')
         d.appendChild(mens)
@@ -271,7 +271,7 @@ PubSub.subscribe('jogadaF', function(msg, data){
         b.setAttribute('class', 'newBt')
         b2.setAttribute('class', 'newBt')
         b.setAttribute('onclick', 'window.location.reload()')
-        b2.setAttribute('onClick', 'beginning()')
+        b2.setAttribute('onClick', 'beggining()')
         
         let d = O('novo')
         d.appendChild(mens)
