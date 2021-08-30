@@ -98,9 +98,7 @@ function processaFim(x){
 // envia solicitação de jogo
 function notifyAd (msg) {
     msg.tipo = 'solJogo';
-    console.log("Servidor enviando para rede em 2: " + msg.tipo);
     for (let i = 0; i < vetorClientes.length; i++) {
-        console.log("ha" + vetorClientes[i].ID + msg.adv2 + " " + msg.adv1)
         if(vetorClientes[i].ID == msg.adv1) {
             try {
                 vetorClientes[i].send(JSON.stringify(msg))
