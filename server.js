@@ -50,7 +50,7 @@ app.get('/add', function(req, resp){
             resp.write("Palavra "+novaPalavra+" foi adicionada ao Banco de Dados")
             palavras.push(novaPalavra)
         } else {
-            resp.write("Palavra já existente no Banco de Dados...")
+            resp.write("Palavra ja existente no Banco de Dados...")
         }
     }
     else {
@@ -87,25 +87,6 @@ function broadcast (msg) {
 }
 
 function processaFim(x){
-    // let query = {_id:x.j}
-    // let found = dbo.collection('usuarios').findOne(query) 
-    // if(JSON.stringify(found) == '{}'){
-    //     if(x.s == 'v'){
-    //         dbo.collection('usuarios').insertOne({_id:x.j, v:1, d:0})
-    //     }
-    //     else if(x.s == 'd'){
-    //         dbo.collection('usuarios').insertOne({_id:x.j, v:0, d:1})
-    //     }
-    // }
-    // else{
-    //     if(x.s == 'v'){
-    //         db.usuarios.updateOne(query, {$inc: {v:1}})
-    //     }
-    //     else if (x.s == 'd'){
-    //         db.usuarios.updateOne(query, {$inc: {d:1}})
-    //     }
-    // }
-    // console.log("Encontrou:", JSON.stringify(found), "enquanto procurava", x.j)
     for(let i = 0; i < jogos.length; i++) {
         if (jogos[i][1] == x.j || jogos[i][2] == x.j){
             jogos.splice(i, 1)
