@@ -256,11 +256,8 @@ wss.on('connection', function connection(ws) {
                 case 'jogoAceito':
                     if(ws.validado == true){
                         // Se jogo foi aceito:
-                        // Manda palavra também
-                        let palavra = palavras[Math.floor(Math.random()*palavras.length)]
-                        let pal = {'tipo': 'palavra', 'p':palavra}
                         console.log(x)
-                        beginAd(x, pal);
+                        beginAd(x);
                     } else {
                         ws.close()
                     }
